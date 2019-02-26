@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "680565471430",
+    "firebase_url": "https://trianglecalculator-a1f6c.firebaseio.com",
+    "project_id": "trianglecalculator-a1f6c",
+    "storage_bucket": "trianglecalculator-a1f6c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680565471430:android:437a44471266e4a3",
+        "android_client_info": {
+          "package_name": "ua.varandas.trianglecalculator"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "680565471430-p6mpvmbfqu7c21k083navtn74u8qe70n.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ua.varandas.trianglecalculator",
+            "certificate_hash": "9ae07e8cd7cb357837b3b60b58985c1b130f5acc"
+          }
+        },
+        {
+          "client_id": "680565471430-lhj2445msli3ai31iea7evo49s91uat7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8xEgTyoC85L1D77Nvn7mKs5Oc83ISpL0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "680565471430-lhj2445msli3ai31iea7evo49s91uat7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

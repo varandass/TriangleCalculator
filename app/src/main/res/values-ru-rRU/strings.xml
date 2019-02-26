@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Калькулятор треугольника</string>
+    <string name="reclama_btn">Убрать рекламу на 8 часов</string>
+    <string name="calculation_btn">Посчитать</string>
+    <string name="message_not_data">Недостаточно данных!</string>
+    <string name="message_not_triangle">Это не треугольник! Введите корректные данные!</string>
+    <string name="toast">Отключение еще не готово, подождите немного!</string>
+</resources>

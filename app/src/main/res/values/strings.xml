@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Triangle Calc</string>
+    <string name="reclama_btn">Remove ads for 8 hours</string>
+    <string name="toast">The shutdown is not ready yet, wait a bit!</string>
+
+    <string name="checkbox_a" translatable="false">A</string>
+    <string name="checkbox_angle_a" translatable="false">α</string>
+    <string name="checkbox_b" translatable="false">B</string>
+    <string name="checkbox_angle_b" translatable="false">β</string>
+    <string name="checkbox_c" translatable="false">C</string>
+    <string name="checkbox_angle_c" translatable="false">γ</string>
+
+    <string name="calculation_btn">Calculate</string>
+
+    <string name="message_not_data">Not enough data!</string>
+    <string name="message_not_triangle">This is not a triangle!Enter the correct data.</string>
+    <string name="banner_ad_unit_id" translatable="false">ca-app-pub-6163958446304162/1052101681</string>
+</resources>

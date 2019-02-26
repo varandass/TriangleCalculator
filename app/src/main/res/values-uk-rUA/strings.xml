@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Калькулятор трикутника</string>
+    <string name="reclama_btn">Прибрати рекламу на 8 годин</string>
+    <string name="calculation_btn">Порахувати</string>
+    <string name="message_not_data">Недостатньо даних!</string>
+    <string name="message_not_triangle">Це не трикутник! Введіть коректні дані!</string>
+    <string name="toast">Відключення ще не готове, почекайте!</string>
+</resources>
