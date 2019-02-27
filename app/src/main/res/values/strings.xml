@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Triangle Calc</string>
-    <string name="reclama_btn">Remove ads for 8 hours</string>
+    <string name="reclama_btn">REMOVE ADS</string>
     <string name="toast">The shutdown is not ready yet, wait a bit!</string>
 
     <string name="checkbox_a" translatable="false">A</string>
@@ -15,4 +15,10 @@
     <string name="message_not_data">Not enough data!</string>
     <string name="message_not_triangle">This is not a triangle!Enter the correct data.</string>
     <string name="banner_ad_unit_id" translatable="false">ca-app-pub-6163958446304162/1052101681</string>
+    <string name="ads_free_remove">Watch the video and remove ads for 2 hours!</string>
+    <string name="ads_cash_remove">Fee to remove ads forever!</string>
+
+    <string name="cancel_btn">CANCEL</string>
+    <string name="ok_btn">OK</string>
+    <string name="dialog_title">REMOVE ADS!</string>
 </resources>

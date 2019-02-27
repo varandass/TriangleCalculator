@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Калькулятор треугольника</string>
-    <string name="reclama_btn">Убрать рекламу на 8 часов</string>
+    <string name="reclama_btn">УБРАТЬ РЕКЛАМУ</string>
     <string name="calculation_btn">Посчитать</string>
     <string name="message_not_data">Недостаточно данных!</string>
     <string name="message_not_triangle">Это не треугольник! Введите корректные данные!</string>
     <string name="toast">Отключение еще не готово, подождите немного!</string>
+    <string name="ads_free_remove">Просмотреть видео и убрать рекламу на 2 часа!</string>
+    <string name="ads_cash_remove">Платно убрать рекламу навсегда!</string>
+    <string name="ok_btn">OK</string>
+    <string name="cancel_btn">ОТМЕНА</string>
+    <string name="dialog_title">УБРАТЬ РЕКЛАМУ!</string>
 </resources>

@@ -23,54 +23,61 @@ object Ads {
     var mInterstitialAd: InterstitialAd? = null
     var mRewardedVideoAd: RewardedVideoAd? = null
 
-    val adRequest: AdRequest
+    private val adRequest: AdRequest
         get() = AdRequest.Builder()
+//                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
 //                .addTestDevice("69DA1B2E4BFAC8EE86151137AFFCCD1B")
                 .build()
 
-    fun disableAds(activity: Activity, disableAds: Boolean) {
+    fun disableAds(activity: Activity) {
 
         val adView = activity.find<AdView>(R.id.adView)
         val ubratReclamuBtn = activity.find<Button>(R.id.btn_ubrat_reclamu)
 
+        Log.d(TAG, "Реклама Отключена")
+        ubratReclamuBtn.visibility = View.GONE
+        adView.visibility = View.GONE
+        mInterstitialAd = null
+        mRewardedVideoAd = null
 
-        if (disableAds) {
-            Log.d(TAG, "Реклама Отключена")
-            ubratReclamuBtn.visibility = View.GONE
-            adView.visibility = View.GONE
-            mInterstitialAd = null
-        } else {
-            Log.d(TAG, "Реклама включена")
-            MobileAds.initialize(activity, ADMOB_APP_ID)
-            adView.loadAd(adRequest)
-            adView.adListener = object : AdListener() {
-                override fun onAdLoaded() {
-                    super.onAdLoaded()
-                    Log.d(TAG, "Реклама загружена")
-                    ubratReclamuBtn.visibility = View.VISIBLE
-                    adView.visibility = View.VISIBLE
-                }
-
-                override fun onAdFailedToLoad(p0: Int) {
-                    super.onAdFailedToLoad(p0)
-                    Log.d(TAG, "Реклама не загружена!  КОД_ОШИБКИ: $p0")
-                }
-            }
-
-            mInterstitialAd = InterstitialAd(activity)
-            mInterstitialAd!!.adUnitId = INTERSTITIAL_UNIT_ID
-            mInterstitialAd!!.loadAd(adRequest)
-            mInterstitialAd!!.adListener = object : AdListener() {
-
-                override fun onAdClosed() {
-                    mInterstitialAd!!.loadAd(adRequest)
-                }
-            }
-        }
     }
 
-    fun loadRevardedAD(activity: Activity) {
+    fun enableAds(activity: Activity){
+
+        val adView = activity.find<AdView>(R.id.adView)
+        val ubratReclamuBtn = activity.find<Button>(R.id.btn_ubrat_reclamu)
+
+        Log.d(TAG, "Реклама включена")
         MobileAds.initialize(activity, ADMOB_APP_ID)
+        adView.loadAd(adRequest)
+        adView.adListener = object : AdListener() {
+            override fun onAdLoaded() {
+                super.onAdLoaded()
+                Log.d(TAG, "Реклама загружена")
+                ubratReclamuBtn.visibility = View.VISIBLE
+                adView.visibility = View.VISIBLE
+            }
+
+            override fun onAdFailedToLoad(p0: Int) {
+                super.onAdFailedToLoad(p0)
+                Log.d(TAG, "Реклама не загружена!  КОД_ОШИБКИ: $p0")
+            }
+        }
+
+        mInterstitialAd = InterstitialAd(activity)
+        mInterstitialAd!!.adUnitId = INTERSTITIAL_UNIT_ID
+        mInterstitialAd!!.loadAd(adRequest)
+        mInterstitialAd!!.adListener = object : AdListener() {
+
+            override fun onAdClosed() {
+                mInterstitialAd!!.loadAd(adRequest)
+            }
+        }
+        loadRevardedAD(activity)
+
+    }
+
+    private fun loadRevardedAD(activity: Activity) {
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity)
         mRewardedVideoAd!!.loadAd(REWARDED_UNIT_ID, adRequest)
         mRewardedVideoAd!!.rewardedVideoAdListener = object : RewardedVideoAdListener {
@@ -94,9 +101,8 @@ object Ads {
 
             override fun onRewarded(p0: RewardItem?) {
                 Log.d(TAG, "Видеореклама ПРОСМОТРЕНА $p0")
-                prefs.estimatedAdsTime = System.currentTimeMillis() + ConstantHolder.DISABLE_8_HOURS
-                prefs.isAdsDisabled = true
-                Ads.disableAds(activity, prefs.isAdsDisabled)
+                prefs.estimatedAdsTime = System.currentTimeMillis() + ConstantHolder.DISABLE_2_HOURS
+                Ads.disableAds(activity)
             }
 
             override fun onRewardedVideoStarted() {

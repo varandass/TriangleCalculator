@@ -1,14 +1,22 @@
 package ua.varandas.trianglecalculator.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import com.github.stephenvinouze.core.managers.KinAppManager
+import com.github.stephenvinouze.core.models.KinAppProductType
+import com.github.stephenvinouze.core.models.KinAppPurchase
+import com.github.stephenvinouze.core.models.KinAppPurchaseResult
 import com.google.firebase.analytics.FirebaseAnalytics
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.remove_ads_dialog.view.*
 import org.jetbrains.anko.db.*
 import ua.varandas.trianglecalculator.R
 import ua.varandas.trianglecalculator.controller.Controller
@@ -24,8 +32,10 @@ import ua.varandas.trianglecalculator.model.Triangle
 
 
 class MainActivity : AppCompatActivity(), IMainContract.IView {
-
     private val TAG = "MainActivity"
+
+    private val RSA = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzzeb9qWvweOr3GbSwmZiqkj9P2XfYGZganzFyr1XgJ9zfDtQmNfwPIcSmkYYfXJPlnv+83PqeEiwnmEkXiA4TO9UHbfScU8rfCw6fPXJZYrGyBTyvN5Pzm/W4Ec3s+hSX5KnJh9a13TaB/qpUfh7IO3FfX9ulNe7g1qzmS1OGbLTGLMcHb2FfHsldp2l/XIBHkEUEiedTRTRvGGI6cuZp0sjacwxO0VRCZE6BBcFqjoJthikWMKtuUu1QTQMMDLvJMM7P2EX7Rm2JEy7zBlGcBc8hTqhJUBuS2i4ERjMzc8envBn365DYYuLz22UuVNMSXHfcU8IFBDgjbyGwZ3ubQIDAQAB"
+
     private lateinit var controller: Controller
     private lateinit var triangle: Triangle
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
@@ -49,8 +59,28 @@ class MainActivity : AppCompatActivity(), IMainContract.IView {
         checkEdit()
 
         btn_calculate.setOnClickListener { calculate() }
-        btn_ubrat_reclamu.setOnClickListener { addRevardedAD() }
+        btn_ubrat_reclamu.setOnClickListener { showAdsDialog() }
 
+    }
+
+
+    private fun showAdsDialog() {
+        val mDialogView = LayoutInflater.from(this).inflate(R.layout.remove_ads_dialog, null)
+        val builder = AlertDialog.Builder(this).setView(mDialogView)
+        val showDialod = builder.show()
+
+        mDialogView.ads_cancel.setOnClickListener { showDialod.dismiss() }
+        mDialogView.ads_ok.setOnClickListener {
+            val check = mDialogView.radioGroup.checkedRadioButtonId
+            when (check) {
+                R.id.radioFreeRemove -> addRevardedAD()
+                R.id.radioCashRemove -> removeAdsForever()
+            }
+            showDialod.dismiss()
+        }
+    }
+
+    private fun removeAdsForever() {
     }
 
     private fun isTimeUp(): Boolean {
@@ -178,14 +208,11 @@ class MainActivity : AppCompatActivity(), IMainContract.IView {
     }
 
     private fun addOrCloseAD() {
-        if (URLConnection.isNetAvailable && isTimeUp()) {
-            prefs.isAdsDisabled = false
-            Ads.disableAds(this, prefs.isAdsDisabled)
-            Ads.loadRevardedAD(this)
+        //btn_ubrat_reclamu.visibility = View.VISIBLE
+        if (URLConnection.isNetAvailable && isTimeUp() && !prefs.isAdsDisabled) {
+            Ads.enableAds(this)
         } else {
-            Ads.disableAds(this, prefs.isAdsDisabled)
-            Ads.mInterstitialAd = null
-            Ads.mRewardedVideoAd = null
+            Ads.disableAds(this)
         }
     }
 
