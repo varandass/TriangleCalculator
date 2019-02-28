@@ -10,6 +10,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import com.android.vending.billing.IInAppBillingService
 import com.github.stephenvinouze.core.managers.KinAppManager
 import com.github.stephenvinouze.core.models.KinAppProductType
 import com.github.stephenvinouze.core.models.KinAppPurchase
@@ -31,18 +32,24 @@ import ua.varandas.trianglecalculator.interfaces.IMainContract
 import ua.varandas.trianglecalculator.model.Triangle
 
 
-class MainActivity : AppCompatActivity(), IMainContract.IView {
-    private val TAG = "MainActivity"
+class MainActivity : AppCompatActivity(), IMainContract.IView, KinAppManager.KinAppListener {
+    private val TAG = "AdMob"
 
     private val RSA = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzzeb9qWvweOr3GbSwmZiqkj9P2XfYGZganzFyr1XgJ9zfDtQmNfwPIcSmkYYfXJPlnv+83PqeEiwnmEkXiA4TO9UHbfScU8rfCw6fPXJZYrGyBTyvN5Pzm/W4Ec3s+hSX5KnJh9a13TaB/qpUfh7IO3FfX9ulNe7g1qzmS1OGbLTGLMcHb2FfHsldp2l/XIBHkEUEiedTRTRvGGI6cuZp0sjacwxO0VRCZE6BBcFqjoJthikWMKtuUu1QTQMMDLvJMM7P2EX7Rm2JEy7zBlGcBc8hTqhJUBuS2i4ERjMzc8envBn365DYYuLz22UuVNMSXHfcU8IFBDgjbyGwZ3ubQIDAQAB"
+    private val product_id = "ads_remove"
 
     private lateinit var controller: Controller
+
     private lateinit var triangle: Triangle
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
+    private val billingManager = KinAppManager(this, RSA)
+    private var isBillingReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        billingManager.bind(this)
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         addOrCloseAD()
@@ -63,7 +70,6 @@ class MainActivity : AppCompatActivity(), IMainContract.IView {
 
     }
 
-
     private fun showAdsDialog() {
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.remove_ads_dialog, null)
         val builder = AlertDialog.Builder(this).setView(mDialogView)
@@ -80,7 +86,58 @@ class MainActivity : AppCompatActivity(), IMainContract.IView {
         }
     }
 
+    override fun onDestroy() {
+        billingManager.unbind()
+        super.onDestroy()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (!billingManager.verifyPurchase(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+
+    override fun onBillingReady() {
+        isBillingReady = true
+        //prefs.isAdsDisabled = false
+    }
+
+
+    override fun onPurchaseFinished(purchaseResult: KinAppPurchaseResult, purchase: KinAppPurchase?) {
+        when (purchaseResult) {
+            KinAppPurchaseResult.SUCCESS -> {
+                Log.d(TAG, "Покупка прошла УСПЕШНО")
+                prefs.isAdsDisabled = true
+                Ads.disableAds(this)
+            }
+            KinAppPurchaseResult.ALREADY_OWNED -> {
+                Log.d(TAG, "Продукт уже КУПЛЕН")
+                prefs.isAdsDisabled = true
+                Ads.disableAds(this)
+            }
+            KinAppPurchaseResult.INVALID_PURCHASE -> {
+                Log.d(TAG, "Покупка НЕДЕЙСТВИТЕЛЬНА")
+                prefs.isAdsDisabled = false
+                Ads.enableAds(this)
+            }
+            KinAppPurchaseResult.INVALID_SIGNATURE -> {
+                Log.d(TAG, "Отмечено как НЕДЕЙСТВИТЕЛЬНО")
+                prefs.isAdsDisabled = false
+                Ads.enableAds(this)
+            }
+            KinAppPurchaseResult.CANCEL -> {
+                Log.d(TAG, "Покупка ОТМЕНЕНА пользователем")
+                prefs.isAdsDisabled = false
+                Ads.enableAds(this)
+            }
+        }
+    }
+
     private fun removeAdsForever() {
+        if (isBillingReady){
+            billingManager.purchase(this, product_id, KinAppProductType.INAPP)
+        }
     }
 
     private fun isTimeUp(): Boolean {
@@ -217,4 +274,6 @@ class MainActivity : AppCompatActivity(), IMainContract.IView {
     }
 
 }
+
+
 
